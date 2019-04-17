@@ -5,6 +5,8 @@ component_version: 1.0.0
 restore_from_s3: false
 restore_from_snapshot: false
 
+cluster_type: cache_cluster # node_group || cache_cluster
+
 # engine_version: 4.0.10
 family: redis4.0
 

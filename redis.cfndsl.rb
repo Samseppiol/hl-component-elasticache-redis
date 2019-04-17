@@ -55,12 +55,14 @@ CloudFormation do
 
     # AuthToken 'String'
     # TransitEncryptionEnabled true
-
     AutomaticFailoverEnabled FnIf(:FailOver, true, false)
-    NumCacheClusters FnIf(:Cluster, Ref(:CacheClusters), Ref('AWS::NoValue'))
-
-    NumNodeGroups FnIf(:Cluster, Ref(:NumNodeGroups), 1)
-    ReplicasPerNodeGroup FnIf(:Cluster, Ref(:ReplicasPerNodeGroup), 0)
+    case cluster_type
+    when 'cache_cluster'
+      NumCacheClusters FnIf(:Cluster, Ref(:CacheClusters), Ref('AWS::NoValue'))
+    when 'node_group'
+      NumNodeGroups FnIf(:Cluster, Ref(:NumNodeGroups), 1)
+      ReplicasPerNodeGroup FnIf(:Cluster, Ref(:ReplicasPerNodeGroup), 0)
+    end if defined? cluster_type
 
     SnapshotArns [ Ref(:S3Snapshot) ] if restore_from_s3
     SnapshotName Ref(:Snapshot) if restore_from_snapshot
@@ -77,7 +79,6 @@ CloudFormation do
     Name FnJoin('', [record, '.', Ref(:EnvironmentName), '.', Ref(:DnsDomain), '.'])
     Type 'CNAME'
     TTL '60'
-    ResourceRecords [ FnGetAtt(:RedisReplicationGroup,'PrimaryEndPoint.Address') ]
+    ResourceRecords [ FnGetAtt(:RedisReplicationGroup, Ref('RedisEndpointType')) ]
   }
-
 end

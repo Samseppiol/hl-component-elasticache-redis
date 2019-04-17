@@ -12,6 +12,7 @@ CfhighlanderTemplate do
     ComponentParam 'EnvironmentType', 'development', isGlobal: true, allowedValues: ['development', 'production']
     ComponentParam 'DnsDomain'
     ComponentParam 'CacheInstanceType'
+    ComponentParam 'RedisEndpointType', 'PrimaryEndPoint.Address'
 
     ComponentParam 'S3Snapshot', '' if restore_from_s3
     ComponentParam 'Snapshot', '' if restore_from_snapshot
