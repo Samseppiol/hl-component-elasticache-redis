@@ -58,7 +58,7 @@ CloudFormation do
     AutomaticFailoverEnabled FnIf(:FailOver, true, false)
     case cluster_type
     when 'cache_cluster'
-      NumCacheClusters FnIf(:Cluster, Ref(:CacheClusters), Ref('AWS::NoValue'))
+      NumCacheClusters Ref(:CacheClusters)
     when 'node_group'
       NumNodeGroups FnIf(:Cluster, Ref(:NumNodeGroups), 1)
       ReplicasPerNodeGroup FnIf(:Cluster, Ref(:ReplicasPerNodeGroup), 0)
